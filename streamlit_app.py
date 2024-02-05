@@ -58,10 +58,22 @@ if streamlit.button('get fruit load list'):
   streamlit.dataframe(my_data_rows)
   
 
-def insert_row_snowflake(new_fruit):
+def insert_row_snowflake(new_fruits):
     with my_cnx.cursor() as my_cur:
-       my_cur.execute("insert into fruit_load_list values ('from streamlit')")
-       return "Thanks for adding" + new_fruit
+        # Using parameterized query to safely insert multiple rows
+        query = "INSERT INTO fruit_load_list VALUES (?)"
+        values = [(fruit,) for fruit in new_fruits]  # List of tuples for parameterized values
+        my_cur.executemany(query, values)
+        my_cnx.commit()
+        return "Thanks for adding: " + ", ".join(new_fruits)
+
+# List of fruits to add
+fruits_to_add = ["jackfruit", "papaya", "guava", "kiwi"]
+
+# Call the function
+result_message = insert_row_snowflake(fruits_to_add)
+print(result_message)
+
 
 add_my_fruit = streamlit.text_input('What fruit would you like to add ?')
 if streamlit.button('get fruit load list', key='get_fruit_load_list_button'):
