@@ -65,7 +65,7 @@ def insert_row_snowflake(fruits_to_add):
         values = [(fruit,) for fruit in new_fruits]  # List of tuples for parameterized values
         my_cur.executemany(query, values)
         my_cnx.commit()
-        return "Thanks for adding: " + ", ".join(fruits_to_add)
+        return "Thanks for adding: " + ", ".join(values)
 
 # List of fruits to add
 fruits_to_add = ["jackfruit", "papaya", "guava", "kiwi"]
